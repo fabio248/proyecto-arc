@@ -12,7 +12,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-// import RedBar from 'components/RedBar'
+import Grafica from './Grafica';
+import fifo from '../../algorithms/FIFO';
+import TableComponent from './Table';
+import { calcularTotal, calculos, calcularPromedio } from './Calculos';
 const option = [
   { label: 'FIFO', id: 1 },
   { label: 'SSTF', id: 2 },
@@ -22,6 +25,11 @@ const option = [
 ];
 
 function Formulario() {
+  const [dataGrafica, setDataGrafica] = useState([]);
+  const [dataTable, setDataTable] = useState({});
+  const [cantidadPosiciones, setCantidadPosiciones] = useState(0);
+  const [showGraf, setshowGraf] = useState(true);
+  //Valores de los inputs del formulario
   const [value, setValue] = useState({
     cantidadPlatos: '',
     cantidadCilindro: '',
@@ -29,20 +37,31 @@ function Formulario() {
     tipoAlgoritmo: '',
     peticiones: [],
     posicionInicial: '',
-    cantidadCabezas: 0,
+    cantidadCabezas: '',
   });
+
   const handlePeticiones = (event) => {
     const array = event.target.value.split(',');
     setValue({ ...value, peticiones: array });
   };
   const handleChange = (event) => {
     setValue({ ...value, [event.target.name]: event.target.value });
-  };
-  const submit = () => {
-    const cantidadCabezas = value.cantidadPlatos * 2;
-    console.log(cantidadCabezas);
-    setValue({ ...value, cantidadCabezas });
     console.log(value);
+  };
+  const validate = () => {};
+  const submit = () => {
+    //Calculos previos
+    const cantidadCabezas = value.cantidadPlatos * 2;
+    setCantidadPosiciones(
+      value.cantidadPlatos * value.cantidadCilindro * value.cantidadCabezas
+    );
+    setValue({ ...value, cantidadCabezas, cantidadPosiciones });
+    //Data para mostrar en la gráfica
+    setDataGrafica(fifo(value.peticiones, value.posicionInicial));
+    setshowGraf(true);
+    setDataTable(calculos(value.peticiones, value.posicionInicial));
+    console.log(calculos(value.peticiones, value.posicionInicial));
+    console.log(dataTable);
   };
   return (
     <Container>
@@ -118,16 +137,35 @@ function Formulario() {
             fullWidth
             label='Peticiones'
             helperText='Escribir las peticiones separadas por comas'
-            placeholder='Ejemplo: 00, 00, 00, 00, 000, 000, 0000'
+            placeholder='Ejemplo: 00,00,00,00,000,000,0000'
             value={value.peticiones}
             onChange={handlePeticiones}
           />
         </Grid>
-        <Grid item xs={4} md={6}>
+
+        <Grid item xs={4} md={12} sx={{ alignItems: 'center' }}>
           <Button variant='contained' type='button' onClick={submit}>
             Enviar
           </Button>
         </Grid>
+        {showGraf ? (
+          <>
+            <Grid
+              item
+              xs={4}
+              md={6}
+              sx={{
+                width: 500,
+                height: 500,
+              }}
+            >
+              <Grafica data={dataGrafica} posiciones={cantidadPosiciones} />
+            </Grid>
+            <Grid item xs={4} md={6}>
+              <TableComponent dataRow={dataTable} />
+            </Grid>
+          </>
+        ) : null}
       </Grid>
     </Container>
   );
