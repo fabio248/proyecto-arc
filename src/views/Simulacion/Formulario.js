@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Chip,
@@ -15,7 +15,7 @@ import {
 import Grafica from './Grafica';
 import fifo from '../../algorithms/FIFO';
 import TableComponent from './Table';
-import { calcularTotal, calculos, calcularPromedio } from './Calculos';
+import { calculos } from './Calculos';
 const option = [
   { label: 'FIFO', id: 1 },
   { label: 'SSTF', id: 2 },
@@ -28,7 +28,7 @@ function Formulario() {
   const [dataGrafica, setDataGrafica] = useState([]);
   const [dataTable, setDataTable] = useState({});
   const [cantidadPosiciones, setCantidadPosiciones] = useState(0);
-  const [showGraf, setshowGraf] = useState(true);
+  const [showGraf, setshowGraf] = useState(false);
   //Valores de los inputs del formulario
   const [value, setValue] = useState({
     cantidadPlatos: '',
@@ -40,28 +40,26 @@ function Formulario() {
     cantidadCabezas: '',
   });
 
+  useEffect(() => {
+    const cantidadCabezas = value.cantidadPlatos * 2;
+    setCantidadPosiciones(
+      value.cantidadPlatos * value.cantidadCilindro * value.cantidadCabezas
+    );
+    setValue({ ...value, cantidadCabezas, cantidadPosiciones });
+  }, [value.cantidadSectores]);
   const handlePeticiones = (event) => {
     const array = event.target.value.split(',');
     setValue({ ...value, peticiones: array });
   };
   const handleChange = (event) => {
     setValue({ ...value, [event.target.name]: event.target.value });
-    console.log(value);
   };
-  const validate = () => {};
+
   const submit = () => {
-    //Calculos previos
-    const cantidadCabezas = value.cantidadPlatos * 2;
-    setCantidadPosiciones(
-      value.cantidadPlatos * value.cantidadCilindro * value.cantidadCabezas
-    );
-    setValue({ ...value, cantidadCabezas, cantidadPosiciones });
+    setshowGraf(true);
     //Data para mostrar en la gráfica
     setDataGrafica(fifo(value.peticiones, value.posicionInicial));
-    setshowGraf(true);
     setDataTable(calculos(value.peticiones, value.posicionInicial));
-    console.log(calculos(value.peticiones, value.posicionInicial));
-    console.log(dataTable);
   };
   return (
     <Container>
