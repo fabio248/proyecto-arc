@@ -33,7 +33,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function TableComponent({ dataRow }) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 350 }}>
+      <Table sx={{ minWidth: 200 }}>
         <TableHead>
           <TableRow>
             <StyledTableCell>Peticiones</StyledTableCell>

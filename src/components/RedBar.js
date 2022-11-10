@@ -5,11 +5,10 @@ function RedBar({ text }) {
   return (
     <Box
       sx={{
-        height: 20,
-        backgroundColor: (theme) => 'rgba(255, 0, 0, 0.1)',
+        height: 16,
       }}
     >
-      <Typography variant='subtitle2' sx={{ color: 'red', fontWeight: 'bold' }}>
+      <Typography variant='caption' sx={{ color: 'red' }}>
         {text}
       </Typography>
     </Box>
