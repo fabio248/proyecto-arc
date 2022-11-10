@@ -4,8 +4,7 @@
  */
 export function calculos(array, posInicial) {
   const calculo = [];
-  const pet = [posInicial];
-  array.map((item) => pet.push(item));
+  const pet = unificarArray(array, posInicial);
   for (let i = 0; i < pet.length - 1; i++) {
     calculo.push({
       name: `${pet[i]} --- ${pet[i + 1]}`,
@@ -31,12 +30,11 @@ export function unificarArray(array, posInicial) {
 
 export function calcularPromedio(array, posInicial) {
   const arrayUnificado = unificarArray(array, posInicial);
-  console.log(arrayUnificado);
   let promedio = 0;
   for (let index = 0; index < arrayUnificado.length; index++) {
     promedio = promedio + arrayUnificado[index];
   }
-  return Math.round(promedio / arrayUnificado.length);
+  return Math.round(promedio / (arrayUnificado.length - 1));
 }
 
 export function calcularTotal(array, posInicial) {
