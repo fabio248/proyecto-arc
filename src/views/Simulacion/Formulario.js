@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Alert,
   Button,
   Chip,
   Container,
@@ -9,20 +10,36 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Snackbar,
   TextField,
   Tooltip,
   Typography,
 } from '@mui/material';
 import Grafica from './Grafica';
 import fifo from '../../algorithms/FIFO';
+import look from '../../algorithms/LOOK';
+import clook from '../../algorithms/CLOOK';
+import sstf from '../../algorithms/SSTF';
+import scan from '../../algorithms/SCAN';
+import cscan from '../../algorithms/CSCAN';
 import TableComponent from './Table';
-import { calculos } from './Calculos';
+import {
+  calculos,
+  convertirStringAIntegerArray,
+  calculosScan,
+} from './Calculos';
 const option = [
   { label: 'FIFO', id: 1 },
   { label: 'SSTF', id: 2 },
   { label: 'SCAN', id: 3 },
-  { label: 'C-LOOK', id: 4 },
-  { label: 'C-SCAN', id: 5 },
+  { label: 'LOOK', id: 4 },
+  { label: 'C-LOOK', id: 5 },
+  { label: 'C-SCAN', id: 6 },
+];
+
+const direc = [
+  { label: 'Ascendente', value: 'right', id: 1 },
+  { label: 'Descendente', value: 'left', id: 2 },
 ];
 
 function Formulario() {
@@ -31,6 +48,7 @@ function Formulario() {
   const [cantidadPosiciones, setCantidadPosiciones] = useState(0);
   const [showGraf, setshowGraf] = useState(false);
   const [error, setError] = useState({});
+  const [open, setOpen] = useState(false);
   //Valores de los inputs del formulario
   const [value, setValue] = useState({
     cantidadCabezas: '',
@@ -39,14 +57,16 @@ function Formulario() {
     tipoAlgoritmo: '',
     peticiones: [],
     posicionInicial: '',
+    direccion: 'right',
+    cantidadPosiciones: '',
   });
 
   useEffect(() => {
     setCantidadPosiciones(
-      value.cantidadCabezas * value.cantidadCilindro * value.cantidadCabezas
+      value.cantidadCabezas * value.cantidadCilindro * value.cantidadSectores
     );
-    setValue({ ...value, cantidadPosiciones });
-  }, [value.cantidadSectores]);
+    setValue({ ...value, cantidadPosiciones: cantidadPosiciones });
+  }, [value.cantidadSectores, value.cantidadCabezas, value.cantidadCilindro]);
 
   const handlePeticiones = (event) => {
     const array = event.target.value.split(',');
@@ -55,37 +75,93 @@ function Formulario() {
   const handleChange = (event) => {
     setValue({ ...value, [event.target.name]: event.target.value });
   };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
   const validate = (value, nameInput) => {
     if (!value) setError({ ...error, [`${nameInput}`]: 'Campo requerido' });
     else setError({ ...error, [`${nameInput}`]: '' });
   };
+  const validateNoNeg = (value, nameInput) => {
+    if (value <= 0)
+      setError({ ...error, [`${nameInput}`]: 'Solamente numeros positivos' });
+    else setError({ ...error, [`${nameInput}`]: '' });
+  };
+
   const handleBlur = (event) => {
+    if (
+      event.target.name === 'cantidadCabezas' ||
+      event.target.name === 'cantidadCilindro'
+    )
+      validateNoNeg(event.target.value, event.target.name);
     validate(event.target.value, event.target.name);
   };
   function seleccionarTipoMetodo() {
     const option = value.tipoAlgoritmo;
+    let posicionesInteger = convertirStringAIntegerArray(value.peticiones);
     switch (option) {
       case 'FIFO':
         setDataGrafica(fifo(value.peticiones, value.posicionInicial));
+        setDataTable(calculos(value.peticiones, value.posicionInicial));
         setshowGraf(true);
         break;
       case 'SSTF':
-        setshowGraf(false);
-        alert('Función en desarrollo');
-
+        let sstfArray = sstf(posicionesInteger, value.posicionInicial);
+        setDataGrafica(fifo(sstfArray, value.posicionInicial));
+        setDataTable(calculos(sstfArray, value.posicionInicial));
+        setshowGraf(true);
         break;
       case 'SCAN':
-        setshowGraf(false);
-        alert('Función en desarrollo');
-
+        let scanArray = scan(
+          posicionesInteger,
+          value.posicionInicial,
+          value.cantidadPosiciones,
+          value.direccion
+        );
+        setDataGrafica(fifo(scanArray, value.posicionInicial));
+        setDataTable(calculos(scanArray, value.posicionInicial));
+        setshowGraf(true);
+        break;
+      case 'LOOK':
+        let lookArray = look(
+          posicionesInteger,
+          value.posicionInicial,
+          value.direccion
+        );
+        setDataGrafica(fifo(lookArray, value.posicionInicial));
+        setDataTable(calculos(lookArray, value.posicionInicial));
+        setshowGraf(true);
         break;
       case 'C-LOOK':
-        setshowGraf(false);
-        alert('Función en desarrollo');
+        let clookArray = clook(
+          posicionesInteger,
+          value.posicionInicial,
+          value.direccion
+        );
+        setDataGrafica(fifo(clookArray, value.posicionInicial));
+        setDataTable(calculos(clookArray, value.posicionInicial));
+        setshowGraf(true);
         break;
       case 'C-SCAN':
-        setshowGraf(false);
-        alert('Función en desarrollo');
+        let cscanArray = cscan(
+          posicionesInteger,
+          value.posicionInicial,
+          value.cantidadPosiciones,
+          value.direccion
+        );
+        setDataGrafica(fifo(cscanArray, value.posicionInicial));
+        setDataTable(
+          calculosScan(
+            cscanArray,
+            value.posicionInicial,
+            value.cantidadPosiciones
+          )
+        );
+        setshowGraf(true);
         break;
       default:
         break;
@@ -93,8 +169,24 @@ function Formulario() {
   }
   const submit = (event) => {
     event.preventDefault();
+    if (
+      !value.cantidadCabezas ||
+      !value.cantidadCilindro ||
+      !value.cantidadSectores ||
+      !value.tipoAlgoritmo ||
+      !value.posicionInicial ||
+      !value.peticiones
+    ) {
+      error.message = 'Debe rellenar todos los campos';
+      setOpen(true);
+      return;
+    } else {
+      setOpen(false);
+      error.message = '';
+    }
+
     //Data para mostrar en la gráfica
-    setDataTable(calculos(value.peticiones, value.posicionInicial));
+    setValue({ ...value, cantidadPosiciones: cantidadPosiciones });
     seleccionarTipoMetodo();
   };
   return (
@@ -125,6 +217,7 @@ function Formulario() {
                 value={value.cantidadCabezas}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                required
                 error={error.cantidadCabezas ? true : false}
               />
             </Tooltip>
@@ -143,6 +236,7 @@ function Formulario() {
                 value={value.cantidadCilindro}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                required
                 error={error.cantidadCilindro ? true : false}
               />
             </Tooltip>
@@ -161,12 +255,45 @@ function Formulario() {
                 value={value.cantidadSectores}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                required
                 error={error.cantidadSectores ? true : false}
               />
             </Tooltip>
+            {value.tipoAlgoritmo === 'C-SCAN' ||
+            value.tipoAlgoritmo === 'C-LOOK' ||
+            value.tipoAlgoritmo === 'LOOK' ||
+            value.tipoAlgoritmo === 'SCAN' ? (
+              <FormControl fullWidth margin='normal'>
+                <InputLabel id='direccion'>Dirección del algoritmo</InputLabel>
+                <Tooltip
+                  title={error.direccion}
+                  followCursor
+                  disableInteractive={error.direccion ? true : false}
+                  arrow
+                >
+                  <Select
+                    id='direccion'
+                    name='direccion'
+                    labelId='direccion'
+                    label='Dirección del algoritmo'
+                    value={value.direccion}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={error.direccion ? true : false}
+                    required
+                  >
+                    {direc.map((algo) => (
+                      <MenuItem value={algo.value} key={algo.id}>
+                        {algo.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Tooltip>
+              </FormControl>
+            ) : null}
           </Grid>
-          <Grid item xs={4} md={6}>
-            <FormControl fullWidth margin='normal'>
+          <Grid item xs={4} md={6} sx={{ textAlign: 'right' }}>
+            <FormControl fullWidth margin='normal' sx={{ textAlign: 'left' }}>
               <InputLabel id='algoritmo'>Tipo de algoritmo</InputLabel>
               <Tooltip
                 title={error.tipoAlgoritmo}
@@ -207,6 +334,7 @@ function Formulario() {
                 value={value.posicionInicial}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                required
                 error={error.posicionInicial ? true : false}
               />
             </Tooltip>
@@ -227,21 +355,35 @@ function Formulario() {
                 value={value.peticiones}
                 onChange={handlePeticiones}
                 onBlur={handleBlur}
+                required
                 error={error.peticiones ? true : false}
               />
             </Tooltip>
-          </Grid>
-
-          <Grid item xs={4} md={12} sx={{ alignItems: 'center' }}>
             <Button variant='contained' type='submit' onClick={submit}>
               Enviar
             </Button>
           </Grid>
+          {error.message && (
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert
+                onClose={handleClose}
+                severity='error'
+                sx={{ width: '100%' }}
+              >
+                {error.message}
+              </Alert>
+            </Snackbar>
+          )}
         </Grid>
       </form>
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, md: 12 }}>
         {showGraf ? (
           <>
+            <Grid item xs={4} md={12} sx={{ textAlign: 'center' }}>
+              <Divider sx={{ mr: 5, ml: 5, mt: 5, mb: 3 }}>
+                <Chip label='Gráfica y tabla de cálculos'></Chip>
+              </Divider>
+            </Grid>
             <Grid
               item
               xs={4}
