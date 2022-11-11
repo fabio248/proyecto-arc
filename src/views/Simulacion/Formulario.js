@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import Grafica from './Grafica';
 import fifo from '../../algorithms/FIFO';
+import look from '../../algorithms/LOOK';
 import TableComponent from './Table';
 import { calculos } from './Calculos';
 const option = [
@@ -58,8 +59,8 @@ function Formulario() {
   const submit = () => {
     setshowGraf(true);
     //Data para mostrar en la gráfica
-    setDataGrafica(fifo(value.peticiones, value.posicionInicial));
-    setDataTable(calculos(value.peticiones, value.posicionInicial));
+    setDataGrafica(fifo(look(value.peticiones,value.posicionInicial, "right"), value.posicionInicial));
+    setDataTable(calculos(look(value.peticiones,value.posicionInicial, "right"), value.posicionInicial));
   };
   return (
     <Container>
