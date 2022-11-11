@@ -32,7 +32,7 @@ export default function clook(peticiones, head, direccion){
           head = posicionActual;
       }
 
-      // Luego servir todas peticiones sueriores acorde al algoritmo
+      // Luego servir todas peticiones superiores acorde al algoritmo
       // C-Look tenemos que iniciar la primera peticion y servimos ascendentemente 
       head = left[0];
 

@@ -17,6 +17,8 @@ import fifo from '../../algorithms/FIFO';
 import look from '../../algorithms/LOOK';
 import clook from '../../algorithms/CLOOK';
 import sstf from '../../algorithms/SSTF';
+import scan from '../../algorithms/SCAN';
+import cscan from '../../algorithms/CSCAN';
 import TableComponent from './Table';
 import { calculos } from './Calculos';
 const option = [
@@ -47,7 +49,7 @@ function Formulario() {
   useEffect(() => {
     const cantidadCabezas = value.cantidadPlatos * 2;
     setCantidadPosiciones(
-      value.cantidadPlatos * value.cantidadCilindro * value.cantidadCabezas
+      value.cantidadSectores * value.cantidadCilindro * value.cantidadCabezas
     );
     setValue({ ...value, cantidadCabezas, cantidadPosiciones });
   }, [value.cantidadSectores]);
@@ -62,8 +64,8 @@ function Formulario() {
   const submit = () => {
     setshowGraf(true);
     //Data para mostrar en la gráfica
-    setDataGrafica(fifo(look(value.peticiones,value.posicionInicial, "right"), value.posicionInicial));
-    setDataTable(calculos(look(value.peticiones,value.posicionInicial, "right"), value.posicionInicial));
+    setDataGrafica(fifo(clook([176, 79, 34, 60, 92, 11, 41, 114], value.posicionInicial,'right'), value.posicionInicial));
+    setDataTable(calculos(clook([176, 79, 34, 60, 92, 11, 41, 114], value.posicionInicial, 'right'), value.posicionInicial));
   };
   return (
     <Container>
