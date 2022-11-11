@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/proyecto-arc/static/css/main.8a68b1ec.css",
-    "main.js": "/proyecto-arc/static/js/main.6f60e0a9.js",
+    "main.js": "/proyecto-arc/static/js/main.afc1f83f.js",
     "static/media/disco-duro-ssd.jpg": "/proyecto-arc/static/media/disco-duro-ssd.8078c86625ee6a7c3ca3.jpg",
     "static/media/fontawesome-webfont.svg?v=4.7.0": "/proyecto-arc/static/media/fontawesome-webfont.6878d55e3615ccf40c38.svg",
     "static/media/fontawesome-webfont.eot": "/proyecto-arc/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
@@ -20,6 +20,6 @@
   },
   "entrypoints": [
     "static/css/main.8a68b1ec.css",
-    "static/js/main.6f60e0a9.js"
+    "static/js/main.afc1f83f.js"
   ]
 }
