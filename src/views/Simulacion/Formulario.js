@@ -15,6 +15,11 @@ import {
 } from '@mui/material';
 import Grafica from './Grafica';
 import fifo from '../../algorithms/FIFO';
+import look from '../../algorithms/LOOK';
+import clook from '../../algorithms/CLOOK';
+import sstf from '../../algorithms/SSTF';
+import scan from '../../algorithms/SCAN';
+import cscan from '../../algorithms/CSCAN';
 import TableComponent from './Table';
 import { calculos } from './Calculos';
 import Redbar from '../../components/RedBar';
@@ -22,8 +27,9 @@ const option = [
   { label: 'FIFO', id: 1 },
   { label: 'SSTF', id: 2 },
   { label: 'SCAN', id: 3 },
-  { label: 'C-LOOK', id: 4 },
-  { label: 'C-SCAN', id: 5 },
+  { label: 'LOOK', id: 4 },
+  { label: 'C-LOOK', id: 5 },
+  { label: 'C-SCAN', id: 6 },
 ];
 
 function Formulario() {
@@ -95,8 +101,8 @@ function Formulario() {
   const submit = (event) => {
     event.preventDefault();
     //Data para mostrar en la gráfica
+    setDataGrafica(fifo(value.peticiones, value.posicionInicial));
     setDataTable(calculos(value.peticiones, value.posicionInicial));
-    seleccionarTipoMetodo();
   };
   return (
     <Container>
