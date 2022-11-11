@@ -29,12 +29,8 @@ export function unificarArray(array, posInicial) {
 }
 
 export function calcularPromedio(array, posInicial) {
-  const arrayUnificado = unificarArray(array, posInicial);
-  let promedio = 0;
-  for (let index = 0; index < arrayUnificado.length-1; index++) {
-    promedio = promedio + Math.abs(arrayUnificado[index] - arrayUnificado[index + 1]);
-  }
-  return Math.round(promedio / (arrayUnificado.length - 1));
+  let promedio = calcularTotal(array, posInicial);
+  return Math.round(promedio / array.length);
 }
 
 export function calcularTotal(array, posInicial) {
