@@ -17,7 +17,6 @@ import Grafica from './Grafica';
 import fifo from '../../algorithms/FIFO';
 import TableComponent from './Table';
 import { calculos } from './Calculos';
-import Redbar from '../../components/RedBar';
 const option = [
   { label: 'FIFO', id: 1 },
   { label: 'SSTF', id: 2 },

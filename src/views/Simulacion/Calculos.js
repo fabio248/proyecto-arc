@@ -29,19 +29,15 @@ export function unificarArray(array, posInicial) {
 }
 
 export function calcularPromedio(array, posInicial) {
-  const arrayUnificado = unificarArray(array, posInicial);
-  let promedio = 0;
-  for (let index = 0; index < arrayUnificado.length; index++) {
-    promedio = promedio + arrayUnificado[index];
-  }
-  return Math.round(promedio / (arrayUnificado.length - 1));
+  let promedio = calcularTotal(array, posInicial);
+  return Math.round(promedio / array.length);
 }
 
 export function calcularTotal(array, posInicial) {
   const arrayUnificado = unificarArray(array, posInicial);
   let total = 0;
-  for (let index = 0; index < arrayUnificado.length; index++) {
-    total = total + arrayUnificado[index];
+  for (let index = 0; index < arrayUnificado.length - 1; index++) {
+    total = total + Math.abs(arrayUnificado[index] - arrayUnificado[index + 1]);
   }
   return total;
 }
