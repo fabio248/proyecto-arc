@@ -15,14 +15,17 @@ import {
 import Grafica from './Grafica';
 import fifo from '../../algorithms/FIFO';
 import look from '../../algorithms/LOOK';
+import clook from '../../algorithms/CLOOK';
+import sstf from '../../algorithms/SSTF';
 import TableComponent from './Table';
 import { calculos } from './Calculos';
 const option = [
   { label: 'FIFO', id: 1 },
   { label: 'SSTF', id: 2 },
   { label: 'SCAN', id: 3 },
-  { label: 'C-LOOK', id: 4 },
-  { label: 'C-SCAN', id: 5 },
+  { label: 'LOOK', id: 4 },
+  { label: 'C-LOOK', id: 5 },
+  { label: 'C-SCAN', id: 6 },
 ];
 
 function Formulario() {

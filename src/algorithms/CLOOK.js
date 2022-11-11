@@ -1,71 +1,73 @@
-function Clook(Q, IH, PH) {
-  let n = Q.length,
-    max_loc = 0,
-    min_loc = 10000;
+export default function clook(peticiones, head, direccion){
+    let posicionActual;
 
-  let SeekTime = new Array(Q.length + 1);
-  SeekTime[0] = '0';
+    let left = [];
+    let right = [];
+    let seek_sequence = [];
 
-  let Queue = new Array(Q.length + 1);
-  Queue[0] = IH;
+    // Agregando peticiones que antes y despues de la posicion Inicia de lacabeza lectora.
+    for(let i = 0; i < peticiones.length; i++)
+    {
+        if (peticiones[i] < head)
+            left.push(peticiones[i]);
+        if (peticiones[i] > head)
+            right.push(peticiones[i]);
+    }
 
-  let seek_time = 0,
-    i,
-    j,
-    f = 0,
-    d = 0;
+    // Ordenando los vectores right y left
+    left.sort(function(a, b){return a - b});
+    right.sort(function(a, b){return a - b});
 
-  Q.sort((a, b) => a - b);
-  min_loc = Q[0];
-  max_loc = Q[n - 1];
+    // SERVIMOS ACORDE A DIRECCION DEL ALGORITMO
+    if(direccion === "right")// ASCENDENTE
+    {
+      for(let i = 0; i < right.length; i++)
+      {
+          posicionActual = right[i];
 
-  let visited = new Array(n + 1);
+          // Agregando a arreglo del algoritmo C-Look superiores a la posicion Inicial
+          seek_sequence.push(posicionActual);
 
-  if (PH <= IH) f = 0;
-  else f = 1;
+          // Asignando nuevo posicion de la cabeza lectora
+          head = posicionActual;
+      }
 
-  for (i = 0; i < n; i++) {
-    let pos = -1;
-    let min = 10000;
-    for (j = 0; j < n; j++) {
-      if (d === 1) {
-        if (Q[j] === IH) {
-          pos = j;
-          break;
-        }
-      } else {
-        if (f === 0) {
-          if (Q[j] > IH && min > Q[j] - IH && visited[j] === 0) {
-            min = Q[j] - IH;
-            pos = j;
-          }
-        } else if (f === 1) {
-          if (Q[j] <= IH && min > IH - Q[j] && visited[j] === 0) {
-            pos = j;
-            min = IH - Q[j];
-          }
-        }
+      // Luego servir todas peticiones sueriores acorde al algoritmo
+      // C-Look tenemos que iniciar la primera peticion y servimos ascendentemente 
+      head = left[0];
+
+      for(let i = 0; i < left.length; i++)
+      {
+          posicionActual = left[i];
+
+          // Agregando a arreglo del algoritmo C-Look inferiores a la posicion Inicial
+          seek_sequence.push(posicionActual);
+
+          // Accessed track is now the new head
+          head = posicionActual;
       }
     }
-    if (pos === -1) {
-      if (f === 0) {
-        IH = min_loc;
-        d = 1;
-      } else {
-        IH = max_loc;
-        d = 1;
-      }
-      i--;
-      continue;
+    else{ // DESCENTENTE
+      for(let i = left.length-1; i >= 0; i--)
+        {
+            posicionActual = left[i];
+            // Agregando a arreglo del algoritmo C - Look inferiores a la posicion Inicial
+            seek_sequence.push(posicionActual);
+            // Asignando nuevo posicion de la cabeza lectora
+            head = posicionActual;
+        }
+        // Luego servir todas peticiones INFERIORES acorde al algoritmo
+        // C-Look tenemos que iniciar la ULTIMA peticion y servimos descentemente
+        head = right[right.length-1];
+
+        for(let i = right.length-1; i >= 0; i--)
+        {
+            posicionActual = right[i];
+            // Agregando a arreglo del algoritmo C - Look inferiores a la posicion Inicial
+            seek_sequence.push(posicionActual);
+            // Asignando nuevo posicion de la cabeza lectora
+            head = posicionActual;
+        }
     }
-    visited[pos] = 1;
-    if (d === 0) seek_time += Math.abs(Q[pos] - IH);
-    else if (d === 1) d = 0;
-    IH = Q[pos];
-    Queue[i + 1] = Q[pos];
-    SeekTime[i + 1] = seek_time + '';
-  }
-  return { Queue, SeekTime };
+    return seek_sequence;
 }
-
-console.log(Clook([85, 8, 5, 45, 60, 66, 852], 50, 45));
