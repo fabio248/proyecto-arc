@@ -83,7 +83,15 @@ function Formulario() {
     setOpen(false);
   };
   const validate = (value, nameInput) => {
+    validateNoNeg(value, nameInput);
     if (!value) setError({ ...error, [`${nameInput}`]: 'Campo requerido' });
+    else if (
+      nameInput === 'cantidadCabezas' ||
+      nameInput === 'cantidadCilindro' ||
+      nameInput === 'cantidadSectores' ||
+      nameInput === 'posicionInicial'
+    )
+      validateNoNeg(value, nameInput);
     else setError({ ...error, [`${nameInput}`]: '' });
   };
   const validateNoNeg = (value, nameInput) => {
@@ -93,11 +101,6 @@ function Formulario() {
   };
 
   const handleBlur = (event) => {
-    if (
-      event.target.name === 'cantidadCabezas' ||
-      event.target.name === 'cantidadCilindro'
-    )
-      validateNoNeg(event.target.value, event.target.name);
     validate(event.target.value, event.target.name);
   };
   function seleccionarTipoMetodo() {
@@ -150,16 +153,12 @@ function Formulario() {
         let cscanArray = cscan(
           posicionesInteger,
           value.posicionInicial,
-          value.cantidadPosiciones,
+          cantidadPosiciones,
           value.direccion
         );
         setDataGrafica(fifo(cscanArray, value.posicionInicial));
         setDataTable(
-          calculosScan(
-            cscanArray,
-            value.posicionInicial,
-            value.cantidadPosiciones
-          )
+          calculosScan(cscanArray, value.posicionInicial, cantidadPosiciones)
         );
         setshowGraf(true);
         break;
@@ -178,6 +177,15 @@ function Formulario() {
       !value.peticiones
     ) {
       error.message = 'Debe rellenar todos los campos';
+      setOpen(true);
+      return;
+    } else if (
+      value.cantidadCabezas <= 0 ||
+      value.cantidadCilindro <= 0 ||
+      value.cantidadSectores <= 0 ||
+      value.posicionInicial <= 0
+    ) {
+      error.message = 'Solo valores positivos';
       setOpen(true);
       return;
     } else {
