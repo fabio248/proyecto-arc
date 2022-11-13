@@ -15,6 +15,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Grafica from './Grafica';
 import fifo from '../../algorithms/FIFO';
 import look from '../../algorithms/LOOK';
@@ -38,17 +39,26 @@ const option = [
 ];
 
 const direc = [
-  { label: 'Ascendente', value: 'right', id: 1 },
-  { label: 'Descendente', value: 'left', id: 2 },
+  { label: 'Ascendente', id: 1 },
+  { label: 'Descendente', id: 2 },
 ];
 
 function Formulario() {
-  const [dataGrafica, setDataGrafica] = useState(null);
-  const [dataTable, setDataTable] = useState(null);
+  const [dataGraficaUno, setDataGraficaUno] = useState(null);
+  const [dataTableUno, setDataTableUno] = useState(null);
+  const [dataGraficaDos, setDataGraficaDos] = useState([]);
+  const [dataTableDos, setDataTableDos] = useState([]);
   const [cantidadPosiciones, setCantidadPosiciones] = useState(0);
-  const [showGraf, setshowGraf] = useState(false);
+  const [tituloGraficaUno, setTituloGraficaUno] = useState('');
+  const [tituloGraficaDos, setTituloGraficaDos] = useState('');
+  const [graficaUno, setGraficaUno] = useState(false);
   const [error, setError] = useState({});
   const [open, setOpen] = useState(false);
+  const [graficaDos, setGraficaDos] = useState(false);
+  const [eleccionAlgoritmo, setEleccionAlgoritmo] = useState('');
+  const [eleccionDireccion, setEleccionDireccion] = useState('');
+  const [eleccionAlgoritmoDos, setEleccionAlgoritmoDos] = useState('');
+  const [eleccionDireccionDos, setEleccionDireccionDos] = useState('');
   //Valores de los inputs del formulario
   const [value, setValue] = useState({
     cantidadCabezas: '',
@@ -57,7 +67,7 @@ function Formulario() {
     tipoAlgoritmo: '',
     peticiones: [],
     posicionInicial: '',
-    direccion: 'right',
+    direccion: 'Ascendente',
     cantidadPosiciones: '',
   });
 
@@ -82,6 +92,14 @@ function Formulario() {
     }
     setOpen(false);
   };
+  /**
+   * Valida los inputs del formulario e invoca la validacion de numeros
+   * no negativos invocando el metodo validateNoNeg para inputs que reciben
+   * datos numericos
+   * @param value Valor del input
+   * @param nameInput Nombre del input a validar
+   * @return {[void]} Ingresa al array de errores un error en caso que exista
+   * * */
   const validate = (value, nameInput) => {
     validateNoNeg(value, nameInput);
     if (!value) setError({ ...error, [`${nameInput}`]: 'Campo requerido' });
@@ -103,20 +121,20 @@ function Formulario() {
   const handleBlur = (event) => {
     validate(event.target.value, event.target.name);
   };
-  function seleccionarTipoMetodo() {
+  function seleccionarMetodoGraficaUno() {
     const option = value.tipoAlgoritmo;
     let posicionesInteger = convertirStringAIntegerArray(value.peticiones);
     switch (option) {
       case 'FIFO':
-        setDataGrafica(fifo(value.peticiones, value.posicionInicial));
-        setDataTable(calculos(value.peticiones, value.posicionInicial));
-        setshowGraf(true);
+        setDataGraficaUno(fifo(value.peticiones, value.posicionInicial));
+        setDataTableUno(calculos(value.peticiones, value.posicionInicial));
+        setGraficaUno(true);
         break;
       case 'SSTF':
         let sstfArray = sstf(posicionesInteger, value.posicionInicial);
-        setDataGrafica(fifo(sstfArray, value.posicionInicial));
-        setDataTable(calculos(sstfArray, value.posicionInicial));
-        setshowGraf(true);
+        setDataGraficaUno(fifo(sstfArray, value.posicionInicial));
+        setDataTableUno(calculos(sstfArray, value.posicionInicial));
+        setGraficaUno(true);
         break;
       case 'SCAN':
         let scanArray = scan(
@@ -125,9 +143,9 @@ function Formulario() {
           value.cantidadPosiciones,
           value.direccion
         );
-        setDataGrafica(fifo(scanArray, value.posicionInicial));
-        setDataTable(calculos(scanArray, value.posicionInicial));
-        setshowGraf(true);
+        setDataGraficaUno(fifo(scanArray, value.posicionInicial));
+        setDataTableUno(calculos(scanArray, value.posicionInicial));
+        setGraficaUno(true);
         break;
       case 'LOOK':
         let lookArray = look(
@@ -135,9 +153,9 @@ function Formulario() {
           value.posicionInicial,
           value.direccion
         );
-        setDataGrafica(fifo(lookArray, value.posicionInicial));
-        setDataTable(calculos(lookArray, value.posicionInicial));
-        setshowGraf(true);
+        setDataGraficaUno(fifo(lookArray, value.posicionInicial));
+        setDataTableUno(calculos(lookArray, value.posicionInicial));
+        setGraficaUno(true);
         break;
       case 'C-LOOK':
         let clookArray = clook(
@@ -145,9 +163,9 @@ function Formulario() {
           value.posicionInicial,
           value.direccion
         );
-        setDataGrafica(fifo(clookArray, value.posicionInicial));
-        setDataTable(calculos(clookArray, value.posicionInicial));
-        setshowGraf(true);
+        setDataGraficaUno(fifo(clookArray, value.posicionInicial));
+        setDataTableUno(calculos(clookArray, value.posicionInicial));
+        setGraficaUno(true);
         break;
       case 'C-SCAN':
         let cscanArray = cscan(
@@ -156,11 +174,74 @@ function Formulario() {
           cantidadPosiciones,
           value.direccion
         );
-        setDataGrafica(fifo(cscanArray, value.posicionInicial));
-        setDataTable(
+        setDataGraficaUno(fifo(cscanArray, value.posicionInicial));
+        setDataTableUno(
           calculosScan(cscanArray, value.posicionInicial, cantidadPosiciones)
         );
-        setshowGraf(true);
+        setGraficaUno(true);
+        break;
+      default:
+        break;
+    }
+  }
+  function seleccionarMetodoGraficaDos() {
+    const option = value.tipoAlgoritmo;
+    let posicionesInteger = convertirStringAIntegerArray(value.peticiones);
+    switch (option) {
+      case 'FIFO':
+        setDataGraficaDos(fifo(value.peticiones, value.posicionInicial));
+        setDataTableDos(calculos(value.peticiones, value.posicionInicial));
+        setGraficaDos(true);
+        break;
+      case 'SSTF':
+        let sstfArray = sstf(posicionesInteger, value.posicionInicial);
+        setDataGraficaDos(fifo(sstfArray, value.posicionInicial));
+        setDataTableDos(calculos(sstfArray, value.posicionInicial));
+        setGraficaDos(true);
+        break;
+      case 'SCAN':
+        let scanArray = scan(
+          posicionesInteger,
+          value.posicionInicial,
+          value.cantidadPosiciones,
+          value.direccion
+        );
+        setDataGraficaDos(fifo(scanArray, value.posicionInicial));
+        setDataTableDos(calculos(scanArray, value.posicionInicial));
+        setGraficaDos(true);
+        break;
+      case 'LOOK':
+        let lookArray = look(
+          posicionesInteger,
+          value.posicionInicial,
+          value.direccion
+        );
+        setDataGraficaDos(fifo(lookArray, value.posicionInicial));
+        setDataTableDos(calculos(lookArray, value.posicionInicial));
+        setGraficaDos(true);
+        break;
+      case 'C-LOOK':
+        let clookArray = clook(
+          posicionesInteger,
+          value.posicionInicial,
+          value.direccion
+        );
+        setDataGraficaDos(fifo(clookArray, value.posicionInicial));
+        setDataTableDos(calculos(clookArray, value.posicionInicial));
+        setGraficaDos(true);
+        break;
+      case 'C-SCAN':
+        let cscanArray = cscan(
+          posicionesInteger,
+          value.posicionInicial,
+          cantidadPosiciones,
+          value.direccion
+        );
+        setDataGraficaDos(fifo(cscanArray, value.posicionInicial));
+        setDataTableDos(
+          calculosScan(cscanArray, value.posicionInicial, cantidadPosiciones)
+        );
+        setGraficaDos(true);
         break;
       default:
         break;
@@ -188,14 +269,83 @@ function Formulario() {
       error.message = 'Solo valores positivos';
       setOpen(true);
       return;
+    } else if (eleccionAlgoritmoDos === value.tipoAlgoritmo) {
+      if (value.tipoAlgoritmo === 'FIFO' || value.tipoAlgoritmo === 'SSTF') {
+        error.message =
+          'Debes elegir un tipo de algoritmo diferente para comparar para el gráfico 1';
+        setOpen(true);
+        setGraficaUno(false);
+        return;
+      } else if (eleccionDireccionDos === value.direccion) {
+        error.message =
+          'Debes elegir un tipo de algoritmo diferente para comparar para el gráfico 1';
+        setOpen(true);
+        setGraficaUno(false);
+        return;
+      }
     } else {
+      for (let i = 0; i < value.peticiones.length; i++) {
+        if (parseInt(value.peticiones[i]) >= cantidadPosiciones) {
+          error.message = `Las peticiones no pueden superar el valor ${
+            cantidadPosiciones - 1
+          }`;
+          setOpen(true);
+          return;
+        }
+      }
       setOpen(false);
       error.message = '';
     }
 
     //Data para mostrar en la gráfica
+    if (value.tipoAlgoritmo === 'FIFO' || value.tipoAlgoritmo === 'SSTF')
+      setTituloGraficaUno(value.tipoAlgoritmo);
+    else setTituloGraficaUno(`${value.tipoAlgoritmo} ${value.direccion}`);
     setValue({ ...value, cantidadPosiciones: cantidadPosiciones });
-    seleccionarTipoMetodo();
+    seleccionarMetodoGraficaUno();
+    setEleccionAlgoritmo(value.tipoAlgoritmo);
+    setEleccionDireccion(value.direccion);
+  };
+
+  const submitComparar = (event) => {
+    event.preventDefault();
+    if (eleccionAlgoritmo === value.tipoAlgoritmo) {
+      if (value.tipoAlgoritmo === 'FIFO' || value.tipoAlgoritmo === 'SSTF') {
+        error.message =
+          'Debes elegir un tipo de algoritmo diferente para comparar para el gráfico 2';
+        setOpen(true);
+        setGraficaDos(false);
+        return;
+      } else if (eleccionDireccion === value.direccion) {
+        error.message =
+          'Debes elegir un tipo de algoritmo diferente para comparar para el gráfico 2';
+        setOpen(true);
+        setGraficaDos(false);
+        return;
+      }
+    } else {
+      for (let i = 0; i < value.peticiones.length; i++) {
+        if (parseInt(value.peticiones[i]) >= cantidadPosiciones) {
+          error.message = `Las peticiones no pueden superar el valor ${
+            cantidadPosiciones - 1
+          }`;
+          setOpen(true);
+          setGraficaDos(false);
+          return;
+        }
+      }
+    }
+
+    if (value.tipoAlgoritmo === 'FIFO' || value.tipoAlgoritmo === 'SSTF')
+      setTituloGraficaDos(value.tipoAlgoritmo);
+    else setTituloGraficaDos(`${value.tipoAlgoritmo} ${value.direccion}`);
+    seleccionarMetodoGraficaDos();
+    setEleccionAlgoritmoDos(value.tipoAlgoritmo);
+    setEleccionDireccionDos(value.direccion);
+  };
+  const eliminarComparacion = (event) => {
+    event.preventDefault();
+    setGraficaDos(false);
   };
   return (
     <Container>
@@ -291,7 +441,7 @@ function Formulario() {
                     required
                   >
                     {direc.map((algo) => (
-                      <MenuItem value={algo.value} key={algo.id}>
+                      <MenuItem value={algo.label} key={algo.id}>
                         {algo.label}
                       </MenuItem>
                     ))}
@@ -367,9 +517,21 @@ function Formulario() {
                 error={error.peticiones ? true : false}
               />
             </Tooltip>
+
             <Button variant='contained' type='submit' onClick={submit}>
-              Enviar
+              {tituloGraficaUno && graficaDos ? `Gráfica 1` : 'Enviar'}
             </Button>
+            {graficaUno ? (
+              <Button
+                variant='contained'
+                color='error'
+                type='submit'
+                onClick={submitComparar}
+                sx={{ ml: 5 }}
+              >
+                {tituloGraficaDos && graficaUno ? 'Gráfica 2' : 'Comparar'}
+              </Button>
+            ) : null}
           </Grid>
           {error.message && (
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
@@ -385,13 +547,15 @@ function Formulario() {
         </Grid>
       </form>
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, md: 12 }}>
-        {showGraf ? (
+        {graficaUno || graficaDos ? (
+          <Grid item xs={4} md={12} sx={{ textAlign: 'center' }}>
+            <Divider sx={{ mr: 5, ml: 5, mt: 5, mb: 3 }}>
+              <Chip label='Gráfica y tabla de cálculos'></Chip>
+            </Divider>
+          </Grid>
+        ) : null}
+        {graficaUno ? (
           <>
-            <Grid item xs={4} md={12} sx={{ textAlign: 'center' }}>
-              <Divider sx={{ mr: 5, ml: 5, mt: 5, mb: 3 }}>
-                <Chip label='Gráfica y tabla de cálculos'></Chip>
-              </Divider>
-            </Grid>
             <Grid
               item
               xs={4}
@@ -401,12 +565,58 @@ function Formulario() {
                 height: 500,
               }}
             >
-              <Grafica data={dataGrafica} posiciones={cantidadPosiciones} />
-            </Grid>
-            <Grid item xs={4} md={6}>
-              <TableComponent dataRow={dataTable} />
+              <Divider sx={{ mr: 5, ml: 5, mb: 3 }}>
+                <Chip label='Gráfica 1'></Chip>
+              </Divider>
+              <Grafica
+                data={dataGraficaUno}
+                posiciones={cantidadPosiciones}
+                nameLegend={tituloGraficaUno}
+                color='#8884d8'
+              />
             </Grid>
           </>
+        ) : null}
+        {graficaDos ? (
+          <Grid
+            item
+            xs={4}
+            md={6}
+            sx={{
+              width: 500,
+              height: 500,
+            }}
+          >
+            <Divider sx={{ mr: 5, ml: 5, mb: 3 }}>
+              <Chip label='Gráfica 2'></Chip>
+            </Divider>
+            <Grafica
+              data={dataGraficaDos}
+              posiciones={cantidadPosiciones}
+              nameLegend={tituloGraficaDos}
+              color='#de0706'
+            />
+          </Grid>
+        ) : null}
+        {graficaUno ? (
+          <Grid item xs={4} md={6} sx={{ mt: 5 }}>
+            <TableComponent dataRow={dataTableUno} name={tituloGraficaUno} />
+          </Grid>
+        ) : null}
+
+        {graficaDos ? (
+          <Grid item xs={4} md={6} sx={{ mt: 5, textAlign: 'right' }}>
+            <TableComponent dataRow={dataTableDos} name={tituloGraficaDos} />
+            <Button
+              variant='contained'
+              color='secondary'
+              sx={{ mt: 5 }}
+              startIcon={<DeleteIcon />}
+              onClick={eliminarComparacion}
+            >
+              Eliminar comparación{' '}
+            </Button>
+          </Grid>
         ) : null}
       </Grid>
     </Container>
