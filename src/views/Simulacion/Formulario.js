@@ -549,33 +549,32 @@ function Formulario() {
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, md: 12 }}>
         {graficaUno || graficaDos ? (
           <Grid item xs={4} md={12} sx={{ textAlign: 'center' }}>
-            <Divider sx={{ mr: 5, ml: 5, mt: 5, mb: 3 }}>
+            <Divider sx={{ mr: 5, ml: 5, mt: 5 }}>
               <Chip label='Gráfica y tabla de cálculos'></Chip>
             </Divider>
           </Grid>
         ) : null}
         {graficaUno ? (
-          <>
-            <Grid
-              item
-              xs={4}
-              md={6}
-              sx={{
-                width: 500,
-                height: 500,
-              }}
-            >
-              <Divider sx={{ mr: 5, ml: 5, mb: 3 }}>
-                <Chip label='Gráfica 1'></Chip>
-              </Divider>
-              <Grafica
-                data={dataGraficaUno}
-                posiciones={cantidadPosiciones}
-                nameLegend={tituloGraficaUno}
-                color='#8884d8'
-              />
-            </Grid>
-          </>
+          <Grid
+            item
+            xs={4}
+            md={6}
+            sx={{
+              width: 500,
+              height: 500,
+              mb: 3,
+            }}
+          >
+            <Divider sx={{ mr: 5, ml: 5, mt: 4 }}>
+              <Chip label='Gráfica 1'></Chip>
+            </Divider>
+            <Grafica
+              data={dataGraficaUno}
+              posiciones={cantidadPosiciones}
+              nameLegend={tituloGraficaUno}
+              color='#8884d8'
+            />
+          </Grid>
         ) : null}
         {graficaDos ? (
           <Grid
@@ -587,7 +586,7 @@ function Formulario() {
               height: 500,
             }}
           >
-            <Divider sx={{ mr: 5, ml: 5, mb: 3 }}>
+            <Divider sx={{ mr: 5, ml: 5, mt: 4 }}>
               <Chip label='Gráfica 2'></Chip>
             </Divider>
             <Grafica
@@ -599,13 +598,13 @@ function Formulario() {
           </Grid>
         ) : null}
         {graficaUno ? (
-          <Grid item xs={4} md={6} sx={{ mt: 5 }}>
+          <Grid item xs={4} md={6} sx={{ mt: 7 }}>
             <TableComponent dataRow={dataTableUno} name={tituloGraficaUno} />
           </Grid>
         ) : null}
 
         {graficaDos ? (
-          <Grid item xs={4} md={6} sx={{ mt: 5, textAlign: 'right' }}>
+          <Grid item xs={4} md={6} sx={{ mt: 7, textAlign: 'right' }}>
             <TableComponent dataRow={dataTableDos} name={tituloGraficaDos} />
             <Button
               variant='contained'
