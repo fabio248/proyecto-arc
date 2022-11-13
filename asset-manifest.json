@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/proyecto-arc/static/css/main.8a68b1ec.css",
-    "main.js": "/proyecto-arc/static/js/main.e378ccb5.js",
-    "static/media/disco-duro-ssd.jpg": "/proyecto-arc/static/media/disco-duro-ssd.8078c86625ee6a7c3ca3.jpg",
+    "main.js": "/proyecto-arc/static/js/main.bfb627b1.js",
     "static/media/fontawesome-webfont.svg?v=4.7.0": "/proyecto-arc/static/media/fontawesome-webfont.6878d55e3615ccf40c38.svg",
     "static/media/fontawesome-webfont.eot": "/proyecto-arc/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
     "static/media/fontawesome-webfont.ttf?v=4.7.0": "/proyecto-arc/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
     "static/media/nucleo-icons.svg": "/proyecto-arc/static/media/nucleo-icons.95fa360c1c73431a0f9a.svg",
+    "static/media/disco-duro-ssd.jpg": "/proyecto-arc/static/media/disco-duro-ssd.4ba85694ec4aa1bef841.jpg",
     "static/media/fontawesome-webfont.woff?v=4.7.0": "/proyecto-arc/static/media/fontawesome-webfont.f691f37e57f04c152e23.woff",
     "static/media/fontawesome-webfont.woff2?v=4.7.0": "/proyecto-arc/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
     "static/media/disco-duro.png": "/proyecto-arc/static/media/disco-duro.47dcc8ff726e74b3760b.png",
@@ -20,6 +20,6 @@
   },
   "entrypoints": [
     "static/css/main.8a68b1ec.css",
-    "static/js/main.e378ccb5.js"
+    "static/js/main.bfb627b1.js"
   ]
 }
