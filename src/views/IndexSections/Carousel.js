@@ -34,14 +34,15 @@ class Carousel extends React.Component {
           <Container className='py-md'>
             <Row className='justify-content-between align-items-center'>
               <Col className='mb-5 mb-lg-0' lg='5'>
-                <h1 className='text-white font-weight-light'>
-                  Algoritmos de planificación
-                </h1>
+                <h2 className='text-white font-weight-light'>
+                  Planificador de discos
+                </h2>
                 <p className='lead text-white mt-4'>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
+                  Un planificador de disco, examina las direcciones de los
+                  sectores que tiene cada petición pendiente en la cola de
+                  servicio, y las reordena de tal manera que éstas puedan ser
+                  servidas con un mínimo de movimientos mecánicos utilizando los
+                  algoritmos de planificación.
                 </p>
               </Col>
               <Col className='mb-lg-auto' lg='6'>

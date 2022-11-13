@@ -275,12 +275,14 @@ function Formulario() {
           'Debes elegir un tipo de algoritmo diferente para comparar para el gráfico 1';
         setOpen(true);
         setGraficaUno(false);
+        setError({ ...error, [`tipoAlgoritmo`]: 'Elige otro algoritmo' });
         return;
       } else if (eleccionDireccionDos === value.direccion) {
         error.message =
           'Debes elegir un tipo de algoritmo diferente para comparar para el gráfico 1';
         setOpen(true);
         setGraficaUno(false);
+        setError({ ...error, [`tipoAlgoritmo`]: 'Elige otro algoritmo' });
         return;
       }
     } else {
@@ -290,13 +292,14 @@ function Formulario() {
             cantidadPosiciones - 1
           }`;
           setOpen(true);
+          setGraficaUno(false);
           return;
         }
       }
       setOpen(false);
       error.message = '';
     }
-
+    setError({ ...error, [`tipoAlgoritmo`]: '' });
     //Data para mostrar en la gráfica
     if (value.tipoAlgoritmo === 'FIFO' || value.tipoAlgoritmo === 'SSTF')
       setTituloGraficaUno(value.tipoAlgoritmo);
@@ -315,11 +318,13 @@ function Formulario() {
           'Debes elegir un tipo de algoritmo diferente para comparar para el gráfico 2';
         setOpen(true);
         setGraficaDos(false);
+        setError({ ...error, [`tipoAlgoritmo`]: 'Elige otro algoritmo' });
         return;
       } else if (eleccionDireccion === value.direccion) {
         error.message =
           'Debes elegir un tipo de algoritmo diferente para comparar para el gráfico 2';
         setOpen(true);
+        setError({ ...error, [`tipoAlgoritmo`]: 'Elige otro algoritmo' });
         setGraficaDos(false);
         return;
       }
@@ -335,7 +340,7 @@ function Formulario() {
         }
       }
     }
-
+    setError({ ...error, [`tipoAlgoritmo`]: '' });
     if (value.tipoAlgoritmo === 'FIFO' || value.tipoAlgoritmo === 'SSTF')
       setTituloGraficaDos(value.tipoAlgoritmo);
     else setTituloGraficaDos(`${value.tipoAlgoritmo} ${value.direccion}`);
@@ -345,7 +350,31 @@ function Formulario() {
   };
   const eliminarComparacion = (event) => {
     event.preventDefault();
+    setEleccionAlgoritmo('');
+    setEleccionAlgoritmoDos('');
+    setEleccionDireccion('');
+    setEleccionDireccionDos('');
     setGraficaDos(false);
+    setGraficaUno(false);
+  };
+  const limpiarFormulario = (event) => {
+    event.preventDefault();
+    setValue({
+      cantidadCabezas: '',
+      cantidadCilindro: '',
+      cantidadSectores: '',
+      tipoAlgoritmo: '',
+      peticiones: [],
+      posicionInicial: '',
+      direccion: 'Ascendente',
+      cantidadPosiciones: '',
+    });
+    setEleccionAlgoritmo('');
+    setEleccionAlgoritmoDos('');
+    setEleccionDireccion('');
+    setEleccionDireccionDos('');
+    setGraficaDos(false);
+    setGraficaUno(false);
   };
   return (
     <Container>
@@ -517,7 +546,17 @@ function Formulario() {
                 error={error.peticiones ? true : false}
               />
             </Tooltip>
-
+            {(graficaUno || graficaDos) && (
+              <Button
+                variant='contained'
+                type='submit'
+                startIcon={<DeleteIcon />}
+                onClick={limpiarFormulario}
+                sx={{ mr: 2 }}
+              >
+                Limpiar
+              </Button>
+            )}
             <Button variant='contained' type='submit' onClick={submit}>
               {tituloGraficaUno && graficaDos ? `Gráfica 1` : 'Enviar'}
             </Button>
@@ -527,7 +566,7 @@ function Formulario() {
                 color='error'
                 type='submit'
                 onClick={submitComparar}
-                sx={{ ml: 5 }}
+                sx={{ ml: 2 }}
               >
                 {tituloGraficaDos && graficaUno ? 'Gráfica 2' : 'Comparar'}
               </Button>
@@ -613,7 +652,7 @@ function Formulario() {
               startIcon={<DeleteIcon />}
               onClick={eliminarComparacion}
             >
-              Eliminar comparación{' '}
+              Eliminar comparación
             </Button>
           </Grid>
         ) : null}
