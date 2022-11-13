@@ -550,6 +550,7 @@ function Formulario() {
               <Button
                 variant='contained'
                 type='submit'
+                color='error'
                 startIcon={<DeleteIcon />}
                 onClick={limpiarFormulario}
                 sx={{ mr: 2 }}
@@ -563,7 +564,7 @@ function Formulario() {
             {graficaUno ? (
               <Button
                 variant='contained'
-                color='error'
+                color='success'
                 type='submit'
                 onClick={submitComparar}
                 sx={{ ml: 2 }}
@@ -632,7 +633,7 @@ function Formulario() {
               data={dataGraficaDos}
               posiciones={cantidadPosiciones}
               nameLegend={tituloGraficaDos}
-              color='#de0706'
+              color='#2d7d32'
             />
           </Grid>
         ) : null}
