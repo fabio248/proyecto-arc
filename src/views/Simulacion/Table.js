@@ -30,13 +30,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function TableComponent({ dataRow }) {
+function TableComponent({ dataRow, name }) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 200 }}>
         <TableHead>
           <TableRow>
-            <StyledTableCell>Peticiones</StyledTableCell>
+            <StyledTableCell>Peticiones {`${name}`} </StyledTableCell>
             <StyledTableCell align='right'>Movimiento</StyledTableCell>
           </TableRow>
         </TableHead>
