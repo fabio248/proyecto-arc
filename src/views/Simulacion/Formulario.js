@@ -285,6 +285,17 @@ function Formulario() {
         setError({ ...error, [`tipoAlgoritmo`]: 'Elige otro algoritmo' });
         return;
       }
+    } else if (parseInt(value.posicionInicial) >= cantidadPosiciones) {
+      error.message = `Las posición inicial no pueden superar el valor ${
+        cantidadPosiciones - 1
+      }`;
+      setError({
+        ...error,
+        [`posicionInicial`]: `Valores menores a ${cantidadPosiciones}`,
+      });
+      setOpen(true);
+      setGraficaUno(false);
+      return;
     } else {
       for (let i = 0; i < value.peticiones.length; i++) {
         if (parseInt(value.peticiones[i]) >= cantidadPosiciones) {
@@ -292,6 +303,10 @@ function Formulario() {
             cantidadPosiciones - 1
           }`;
           setOpen(true);
+          setError({
+            ...error,
+            [`peticiones`]: `Peticiones menores a ${cantidadPosiciones}`,
+          });
           setGraficaUno(false);
           return;
         }
@@ -300,6 +315,8 @@ function Formulario() {
       error.message = '';
     }
     setError({ ...error, [`tipoAlgoritmo`]: '' });
+    setError({ ...error, peticiones: '' });
+    setError({ ...error, posicionInicial: '' });
     //Data para mostrar en la gráfica
     if (value.tipoAlgoritmo === 'FIFO' || value.tipoAlgoritmo === 'SSTF')
       setTituloGraficaUno(value.tipoAlgoritmo);
@@ -328,12 +345,27 @@ function Formulario() {
         setGraficaDos(false);
         return;
       }
+    } else if (parseInt(value.posicionInicial) >= cantidadPosiciones) {
+      error.message = `Las peticiones no pueden superar el valor ${
+        cantidadPosiciones - 1
+      }`;
+      setError({
+        ...error,
+        [`posicionInicial`]: `Valores menores a ${cantidadPosiciones}`,
+      });
+      setOpen(true);
+      setGraficaDos(false);
+      return;
     } else {
       for (let i = 0; i < value.peticiones.length; i++) {
         if (parseInt(value.peticiones[i]) >= cantidadPosiciones) {
           error.message = `Las peticiones no pueden superar el valor ${
             cantidadPosiciones - 1
           }`;
+          setError({
+            ...error,
+            peticiones: `Peticiones menores a ${cantidadPosiciones}`,
+          });
           setOpen(true);
           setGraficaDos(false);
           return;
@@ -341,6 +373,8 @@ function Formulario() {
       }
     }
     setError({ ...error, [`tipoAlgoritmo`]: '' });
+    setError({ ...error, peticiones: '' });
+    setError({ ...error, posicionInicial: '' });
     if (value.tipoAlgoritmo === 'FIFO' || value.tipoAlgoritmo === 'SSTF')
       setTituloGraficaDos(value.tipoAlgoritmo);
     else setTituloGraficaDos(`${value.tipoAlgoritmo} ${value.direccion}`);
