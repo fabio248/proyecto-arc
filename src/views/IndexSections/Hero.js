@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Typography } from '@mui/material';
 // reactstrap components
 import { Button, Container, Row, Col } from 'reactstrap';
 
@@ -31,12 +31,12 @@ class Hero extends React.Component {
                       alt='...'
                       className='img-fluid'
                       src={require('assets/img/brand/argon-react-white.png')}
-                      style={{ width: '200px' }}
+                      style={{ width: '400px' }}
                     />
-                    <p className='lead text-white'>
+                    <Typography variant='h5' color='white'>
                       Pagina de simulación de algoritmos de planificación de
                       discos duros
-                    </p>
+                    </Typography>
                     <div className='btn-wrapper mt-5'>
                       <Button
                         className='btn-white btn-icon mb-3 mb-sm-0'
