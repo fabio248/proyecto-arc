@@ -65,7 +65,7 @@ function Formulario() {
     cantidadCilindro: '',
     cantidadSectores: '',
     tipoAlgoritmo: '',
-    peticiones: [],
+    peticiones: '',
     posicionInicial: '',
     direccion: 'Ascendente',
     cantidadPosiciones: '',
@@ -439,6 +439,7 @@ function Formulario() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 required
+                type='number'
                 error={error.cantidadCabezas ? true : false}
               />
             </Tooltip>
@@ -458,6 +459,7 @@ function Formulario() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 required
+                type='number'
                 error={error.cantidadCilindro ? true : false}
               />
             </Tooltip>
@@ -477,6 +479,7 @@ function Formulario() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 required
+                type='number'
                 error={error.cantidadSectores ? true : false}
               />
             </Tooltip>
@@ -556,6 +559,7 @@ function Formulario() {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 required
+                type='number'
                 error={error.posicionInicial ? true : false}
               />
             </Tooltip>
