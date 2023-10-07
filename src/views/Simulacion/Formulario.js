@@ -176,7 +176,7 @@ function Formulario() {
         );
         setDataGraficaUno(fifo(cscanArray, value.posicionInicial));
         setDataTableUno(
-          calculosScan(cscanArray, value.posicionInicial, cantidadPosiciones)
+          calculos(cscanArray, value.posicionInicial, cantidadPosiciones)
         );
         setGraficaUno(true);
         break;
@@ -239,7 +239,7 @@ function Formulario() {
         );
         setDataGraficaDos(fifo(cscanArray, value.posicionInicial));
         setDataTableDos(
-          calculosScan(cscanArray, value.posicionInicial, cantidadPosiciones)
+          calculos(cscanArray, value.posicionInicial, cantidadPosiciones)
         );
         setGraficaDos(true);
         break;
